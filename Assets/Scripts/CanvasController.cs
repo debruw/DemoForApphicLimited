@@ -62,8 +62,8 @@ public class CanvasController : MonoBehaviour
     private void OnApplicationQuit()
     {// Before leaving game, save the time data to PlayerPrefs for use it on next open
         //Save the current system time as a string in the player prefs class
-        PlayerPrefs.SetString("LASTTIMESAVED", System.DateTime.Now.ToBinary().ToString());
+        PlayerPrefs.SetString("LASTTIMESAVED", System.DateTime.Now.ToString());
 
-        print("Saving this date to prefs: " + System.DateTime.Now);
+        Debug.Log("Saving this date to prefs: " + System.DateTime.Now);
     }
 }

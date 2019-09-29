@@ -13,6 +13,10 @@ ScriptsOnlyBuild:
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
+    UnityEngine.Advertisements.dll:
+    - UnityEngine.Advertisements.Banner
+    - UnityEngine.Advertisements.CallbackExecutor
+    - UnityEngine.Advertisements.Placeholder
     UnityEngine.UI.dll:
     - UnityEngine.EventSystems.EventSystem
     - UnityEngine.EventSystems.StandaloneInputModule
@@ -513,7 +517,7 @@ ScriptsOnlyBuild:
     className: CameraFollow
   - hash:
       serializedVersion: 2
-      Hash: 248eb9dbf032129603743ef83bf3067c
+      Hash: 40a7e7ef4164e6185b3dcf54abf29b84
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: MainMenuController

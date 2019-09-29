@@ -9,7 +9,7 @@ public class MainMenuController : MonoBehaviour
     public RectTransform OptionsPanel, RewardedVideoPanel; // Object for option menu and rewarded video menu
     public Button MusicBtn; // Object for controlling music state
 
-    public Text LifeText; // Object for live text
+    public Image HearthFillImage; // Object for live text
 
     public LifeController my_lifeController; // LifeController in scene
     DateTime currentDate; // Variable for current date time
@@ -17,19 +17,25 @@ public class MainMenuController : MonoBehaviour
 
     private void Awake()
     {
+        if(!PlayerPrefs.HasKey("LASTTIMESAVED"))
+        {
+            PlayerPrefs.SetString("LASTTIMESAVED", System.DateTime.Now.ToString());
+        }
         //Store the current time when it starts
         currentDate = System.DateTime.Now;
 
         //Grab the old time from the player prefs as a long
-        long temp = Convert.ToInt64(PlayerPrefs.GetString("LASTTIMESAVED"));
+        DateTime oldDate;
+        DateTime.TryParse(PlayerPrefs.GetString("LASTTIMESAVED"), out oldDate);
+         
 
         //Convert the old time from binary to a DataTime variable
-        DateTime oldDate = DateTime.FromBinary(temp);
-        print("oldDate: " + oldDate);
+        //DateTime oldDate = DateTime.FromBinary(temp);
+        Debug.Log("oldDate: " + oldDate);
 
         //Use the Subtract method and store the result as a timespan variable
         TimeSpan difference = currentDate.Subtract(oldDate);
-        print("Difference: " + difference);
+        Debug.Log("Difference: " + difference);
 
         // Control if difference greater than 24 hour
         // if true give player max live
@@ -39,14 +45,13 @@ public class MainMenuController : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         OptionsPanel.gameObject.SetActive(false);
         RewardedVideoPanel.gameObject.SetActive(false);
 
         // Control is game is openin for first time in this device
-        if (PlayerPrefs.GetInt("ISFIRSTTIMEOPENING", 1) == 1)
+        if (PlayerPrefs.HasKey("ISFIRSTTIMEOPENING") == false)
         {// its first time opening on this device
             Debug.Log("First Time Opening");
 
@@ -64,16 +69,14 @@ public class MainMenuController : MonoBehaviour
 
             InitializeScene();
         }
-
-        LifeText.text = "Lives : " + PlayerPrefs.GetInt("LIVESLEFT");
     }
-
+    
     /// <summary>
     ///  Update the game screen after winning the reward
     /// </summary>
     public void updateScreenForReward()
     {
-        LifeText.text = "Lives : " + PlayerPrefs.GetInt("LIVESLEFT");
+        HearthFillImage.fillAmount = PlayerPrefs.GetInt("LIVESLEFT") / 3f;
         RewardedVideoPanel.gameObject.SetActive(false);
     }
 
@@ -94,6 +97,7 @@ public class MainMenuController : MonoBehaviour
     /// </summary>
     void InitializeScene()
     {
+        Debug.Log("initialize scene");
         if (PlayerPrefs.GetInt("ISMUSICPLAYING") == 1)
         {
             MusicBtn.GetComponent<Image>().color = Color.green;
@@ -106,6 +110,7 @@ public class MainMenuController : MonoBehaviour
             MusicBtn.GetComponentInChildren<Text>().text = "OFF";
             GetComponent<AudioSource>().mute = true;
         }
+        HearthFillImage.fillAmount = PlayerPrefs.GetInt("LIVESLEFT") / 3f;
     }
 
     /// <summary>
@@ -177,8 +182,8 @@ public class MainMenuController : MonoBehaviour
     private void OnApplicationQuit()
     {// Before leaving game, save the time data to PlayerPrefs for use it on next open
         //Savee the current system time as a string in the player prefs class
-        PlayerPrefs.SetString("LASTTIMESAVED", System.DateTime.Now.ToBinary().ToString());
+        PlayerPrefs.SetString("LASTTIMESAVED", System.DateTime.Now.ToString());
 
-        print("Saving this date to prefs: " + System.DateTime.Now);
+        Debug.Log("Saving this date to prefs: " + System.DateTime.Now);
     }
 }
